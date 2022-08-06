@@ -12,20 +12,27 @@ const kittySchema = new mongoose.Schema({
     status:String,
     id:Number
   });
-  const Kitten = mongoose.model('To_do_Date', kittySchema);
+  let Kitten;
+//   const Kitten = mongoose.model('To_do_Date', kittySchema);
   
 let ejs=require('ejs')
 let app=express();
 app.use(express.urlencoded())
 app.set('view engine',"ejs")
 app.use(express.static(__dirname + '/static'));
-app.get('/',(req,res)=>{
+app.get('/home',(req,res)=>{//edited area
     let temp= new Date();
     Kitten.find(function (err, kittens) {
         if (err) return console.error(err);    
     let tempdate=temp.getDay()+"/"+temp.getMonth()+"/"+temp.getFullYear();
     res.render('index',{Date:tempdate,Data:kittens})
 })
+})
+app.get('/signout',(req,res)=>{
+    res.redirect('/')
+})
+app.get('/',(req,res)=>{
+    res.render('login')
 })
 app.post('/add',(req,res)=>{
     const fluffy = new Kitten({ task: req.body.addNew,status:"unchecked",id:i++});
@@ -35,7 +42,7 @@ app.post('/add',(req,res)=>{
         if (err) return console.error(err);
         else{
            
-            res.redirect('/')
+            res.redirect('/home')
         }
        
       });
@@ -45,7 +52,15 @@ app.post('/add',(req,res)=>{
     }
    
 })
-
+app.get('/use',(req,res)=>{
+    let temp= new Date();
+    let tempdate=temp.getDay()+"/"+temp.getMonth()+"/"+temp.getFullYear();
+    res.render('use',{Date:tempdate})
+})
+app.post('/login',(req,res)=>{
+     Kitten = mongoose.model(req.body.givenEmail, kittySchema);
+    res.redirect('/home')
+})
 app.post('/update',(req,res)=>{
     console.log(req.body)
     
@@ -59,7 +74,7 @@ app.post('/update',(req,res)=>{
     Kitten.find(function (err, kittens) {
         if (err) return console.error(err);    
    console.log(kittens)
-    res.redirect('/')
+    res.redirect('/home')
 })
 })
 app.listen(80);
