@@ -1,7 +1,7 @@
 let express=require('express')
 let i=0;
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/ravi', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect("mongodb+srv://RaviKumar:Ravi%40123@cluster0.fjtakvv.mongodb.net/onlocalhost", {useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -62,19 +62,19 @@ app.post('/login',(req,res)=>{
     res.redirect('/home')
 })
 app.post('/update',(req,res)=>{
-    console.log(req.body)
+    // console.log(req.body)
     
     for (const key in req.body) {
-        console.log(key)
+        // console.log(key)
         Kitten.update({ id: Number(key) }, { status: "checked" }, ()=>{
-            console.log("Updated")
+            // console.log("Updated")
         });
     }
 
-    Kitten.find(function (err, kittens) {
-        if (err) return console.error(err);    
-   console.log(kittens)
+    // Kitten.find(function (err, kittens) {
+    //     if (err) return console.error(err);    
+//    console.log(kittens)
     res.redirect('/home')
 })
-})
+
 app.listen(80);
